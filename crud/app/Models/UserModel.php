@@ -19,31 +19,31 @@ class UserModel extends Model
 	}
 
     public function getUsersCount(){
-        return  $this->countAllResults();
+        return $this->countAllResults();
     }
 
-    public function insert($data)
+    public function insertData($data = null)
 	{
 		$this->insert($data);
 		$insert_id = $this->insertID();
 		return $insert_id;
 	}
 
-	public function update($id, $data)
+	public function updateData($id = null, $data = null)
 	{
 		$this->set($data);
 		$this->where('id', $id);
-		$this->update();
+		return $this->update();
 	}
 	
-	public function delete($id)
+	public function deleteUser($id)
 	{
 		$this->set('is_deleted', true);
 		$this->where('id', $id);
 		return $this->update();
 	}
 
-	public function restore($id)
+	public function restoreUser($id)
 	{
 		$this->set('is_deleted', false);
 		$this->where('id', $id);
