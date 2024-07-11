@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class PostController extends Controller
 {
@@ -12,6 +13,13 @@ class PostController extends Controller
     public function index()
     {
         //
+        $posts = Post::all();
+        return view('posts.index', compact('posts'));
+    }
+
+    public function create()
+    {
+      return view('posts.create');
     }
 
     /**
@@ -39,12 +47,27 @@ class PostController extends Controller
         //
     }
 
+    public function edit($id)
+    {
+      $post = Post::find($id);
+      return view('posts.edit', compact('post'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
         //
+        $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+        ]);
+
+        $post = Post::find($id);
+        $post->update($request->all());
+        return redirect()->route('posts.index')
+        ->with('success', 'Post updated successfully.');
     }
 
     /**
@@ -53,5 +76,9 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         //
+        $post = Post::find($id);
+        $post->delete();
+        return redirect()->route('posts.index')
+          ->with('success', 'Post deleted successfully');
     }
 }
